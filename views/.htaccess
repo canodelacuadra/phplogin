@@ -1,0 +1,5 @@
+# Este archivo evita que los archivos de vista .php se acceden directamente desde el exterior
+<Files ~ "\.(htaccess|php)$">
+order allow,deny
+deny from all
+</Files>
