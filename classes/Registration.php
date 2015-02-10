@@ -2,7 +2,7 @@
 
 /**
  * Class registration
- * handles the user registration
+ * maneja el registro de usuario
  */
 class Registration
 {
@@ -41,7 +41,7 @@ class Registration
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
             $this->errors[] = "Empty Password";
         } elseif ($_POST['user_password_new'] !== $_POST['user_password_repeat']) {
-            $this->errors[] = "Password and password repeat are not the same";
+            $this->errors[] = "Contraseña y repetir contraseña deben ser  los mismas";
         } elseif (strlen($_POST['user_password_new']) < 6) {
             $this->errors[] = "Password has a minimum length of 6 characters";
         } elseif (strlen($_POST['user_name']) > 64 || strlen($_POST['user_name']) < 2) {
@@ -82,35 +82,35 @@ class Registration
 
                 $user_password = $_POST['user_password_new'];
 
-                // crypt the user's password with PHP 5.5's password_hash() function, results in a 60 character
+                // cripta la contraseña del usuario con PHP 5.5's password_hash() function, results in a 60 character
                 // hash string. the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using
-                // PHP 5.3/5.4, by the password hashing compatibility library
+                // PHP 5.3/5.4, por la contraseña hash biblioteca de compatibilidad
                 $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT);
 
-                // check if user or email address already exists
+                // comprobar si el usuario o dirección de email ya existe
                 $sql = "SELECT * FROM users WHERE user_name = '" . $user_name . "' OR user_email = '" . $user_email . "';";
                 $query_check_user_name = $this->db_connection->query($sql);
 
                 if ($query_check_user_name->num_rows == 1) {
-                    $this->errors[] = "Sorry, that username / email address is already taken.";
+                    $this->errors[] = "Lo sentimos, ese nombre de usuario / dirección de correo electrónico ya está existe.";
                 } else {
-                    // write new user's data into database
+                    // escribe datos del nuevo usuario en una base de datos
                     $sql = "INSERT INTO users (user_name, user_password_hash, user_email)
                             VALUES('" . $user_name . "', '" . $user_password_hash . "', '" . $user_email . "');";
                     $query_new_user_insert = $this->db_connection->query($sql);
 
                     // if user has been added successfully
                     if ($query_new_user_insert) {
-                        $this->messages[] = "Your account has been created successfully. You can now log in.";
+                        $this->messages[] = "Su cuenta ha sido creada con éxito. Ahora puede iniciar sesión.";
                     } else {
-                        $this->errors[] = "Sorry, your registration failed. Please go back and try again.";
+                        $this->errors[] = "Lo sentimos, el registro falló. Por favor regrese y vuelva a intentarlo.";
                     }
                 }
             } else {
-                $this->errors[] = "Sorry, no database connection.";
+                $this->errors[] = "Lo sentimos, no hay conexión de base de datos.";
             }
         } else {
-            $this->errors[] = "An unknown error occurred.";
+            $this->errors[] = "Se ha producido un error desconocido.";
         }
     }
 }

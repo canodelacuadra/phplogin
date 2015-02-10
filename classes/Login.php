@@ -20,46 +20,46 @@ class Login
     public $messages = array();
 
     /**
-     * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$login = new Login();"
+     * la función "__construct()" inicia automáticamente cada vez que se crea un objeto de esta clase,
+     * Ya sabes, cuando lo hagas "$login = new Login();"
      */
     public function __construct()
     {
-        // create/read session, absolutely necessary
+        // crear/leer período de sesiones, absolutamente necesario crear/leer
         session_start();
 
-        // check the possible login actions:
-        // if user tried to log out (happen when user clicks logout button)
+        // Compruebe las acciones posibles de inicio de sesión:
+        // Si el usuario trató de cerrar la sesión (ocurre cuando el usuario hace clic en logout)
         if (isset($_GET["logout"])) {
             $this->doLogout();
         }
-        // login via post data (if user just submitted a login form)
+        // ingresar a través de datos post (si el usuario acaba de presentar un formulario de inicio de sesión)
         elseif (isset($_POST["login"])) {
             $this->dologinWithPostData();
         }
     }
 
     /**
-     * log in with post data
+     * iniciar sesión con datos post
      */
     private function dologinWithPostData()
     {
         // check login form contents
         if (empty($_POST['user_name'])) {
-            $this->errors[] = "Username field was empty.";
+            $this->errors[] = "Nombre de usuario campo estaba vacía.";
         } elseif (empty($_POST['user_password'])) {
-            $this->errors[] = "Password field was empty.";
+            $this->errors[] = "Campo de contraseña estaba vacío.";
         } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
 
             // create a database connection, using the constants from config/db.php (which we loaded in index.php)
             $this->db_connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-            // change character set to utf8 and check it
+            // cambiar conjunto de caracteres utf8 y lo comprueba
             if (!$this->db_connection->set_charset("utf8")) {
                 $this->errors[] = $this->db_connection->error;
             }
 
-            // if no connection errors (= working database connection)
+            // Si no hay errores de conexión (= working database connection)
             if (!$this->db_connection->connect_errno) {
 
                 // escape the POST stuff
@@ -113,7 +113,7 @@ class Login
     }
 
     /**
-     * simply return the current state of the user's login
+     * simplemente devuelva el estado actual de login del usuario
      * @return boolean user's login status
      */
     public function isUserLoggedIn()
